@@ -16,8 +16,8 @@ module HipChat
       setup_proxy(http_proxy) if http_proxy
     end
 
-    def rooms
-      @rooms ||= _rooms
+    def rooms(options={})
+      _rooms(options)
     end
 
     def [](name)
@@ -85,11 +85,11 @@ module HipChat
                                proxy_url.user, proxy_url.password)
     end
 
-    def _rooms
+    def _rooms(options)
       response = self.class.get(@api.rooms_config[:url],
         :query => {
           :auth_token => @token
-        },
+        }.merge(options),
         :headers => @api.headers
       )
       case response.code
